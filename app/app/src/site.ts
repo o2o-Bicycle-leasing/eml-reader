@@ -24,15 +24,16 @@ export interface Site
 
 export const site: Site = {
 	lang: 'en',
-	title: 'EML Reader',
+	title: 'o2o eml reader',
 	description: {
-		'en': 'Online tool to read and display the content of an EML file.',
-		'fr': 'Outil en ligne pour lire et afficher le contenu d\'un fichier EML.',
+		'en': 'Read and display the content of an EML e-mail file — an o2o internal tool. All processing happens locally in your browser.',
+		'fr': 'Lire et afficher le contenu d\'un fichier e-mail EML — un outil interne o2o. Tout le traitement se fait localement dans votre navigateur.',
 	},
 	version: GITHUB_SHA || VERSION_TAG || 'dev',
-	author: 'Matiboux',
-	themeColor: '#ffffff',
+	author: 'o2o',
+	themeColor: '#0029D6',
 	viewportScale: 1,
+	favicon: '/favicon.svg',
 	socialTitle: true,
 	socialDescription: true,
 }

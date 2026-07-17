@@ -1,2 +1,40 @@
+@import "~/styles/fonts.css";
 @import "~/styles/tailwind.css";
 @import "~/styles/utils.css";
+
+/* o2o brand variables — declared explicitly on :root so raw var() references in
+   component-scoped styles resolve regardless of Tailwind's theme tree-shaking. */
+:root {
+	--color-o2o-blue:        #0029D6;
+	--color-o2o-blue-light:  #99ADFF;
+	--color-o2o-purple:      #86226F;
+	--color-o2o-orange:      #FFA203;
+	--color-o2o-off-white:   #F9F9F9;
+	--color-o2o-gray-light:  #F0F0F0;
+	--color-o2o-gray:        #595959;
+	--color-o2o-text:        #201E26;
+	--color-o2o-tint-blue:   #F3F5FF;
+	--color-o2o-tint-orange: #FFF7EB;
+	--color-o2o-tint-purple: #F9EDF7;
+
+	/* o2o-branded blue scale (matches the @theme override) */
+	--color-blue-300: #99ADFF;
+	--color-blue-500: #0029D6;
+	--color-blue-600: #0029D6;
+	--color-blue-700: #001FA6;
+
+	--font-heading: 'Montserrat', 'Arial', sans-serif;
+	--font-body:    'Roboto', 'Arial', sans-serif;
+}
+
+/* o2o brand base styling */
+@layer base {
+	body {
+		font-family: var(--font-body);
+		color: var(--color-o2o-text);
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: var(--font-heading);
+	}
+}

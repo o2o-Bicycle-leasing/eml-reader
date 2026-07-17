@@ -1,0 +1,9 @@
+# pnpm reads build-script approvals from this file. These four packages ship
+# prebuilt native binaries and need their install scripts approved so that
+# `pnpm install` doesn't abort with ERR_PNPM_IGNORED_BUILDS (which would
+# otherwise break the Docker build on Coolify).
+allowBuilds:
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  esbuild: true
+  sharp: true

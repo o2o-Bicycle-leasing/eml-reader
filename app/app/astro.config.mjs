@@ -35,6 +35,28 @@ export default defineConfig({
 		},
 	},
 	i18n: i18n,
+	experimental: {
+		// SECURITY: Content-Security-Policy generated at build time. Astro manages
+		// `script-src` and `style-src` as 'self' + auto-generated hashes for its own
+		// inline island/critical-CSS blocks, so the policy stays strict (no
+		// 'unsafe-inline' for scripts) without breaking hydration. Defense-in-depth
+		// on top of the sandboxed e-mail iframe. `frame-ancestors` is a header-only
+		// directive (ignored in <meta>), so it's set at the reverse-proxy layer.
+		csp: {
+			directives: [
+				"default-src 'self'",
+				"base-uri 'self'",
+				"object-src 'none'",
+				// E-mail inline images are data: URIs; external img/font/connect are
+				// blocked, which also stops e-mail tracking pixels from loading.
+				"img-src 'self' data:",
+				"font-src 'self'",
+				"connect-src 'self'",
+				"frame-src 'self'",
+				"form-action 'self'",
+			],
+		},
+	},
 	env: {
 		schema: {
 			// Deployment configuration

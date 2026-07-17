@@ -44,7 +44,9 @@ RUN --mount=type=cache,id=npm,target=/root/.npm \
 FROM node_build AS deps_base
 
 # Copy build configuration
-COPY --link ./app/package.json ./app/pnpm-lock.yaml ./
+# (pnpm-workspace.yaml carries the approved native build scripts — see the file.
+#  Without it, `pnpm install` aborts with ERR_PNPM_IGNORED_BUILDS.)
+COPY --link ./app/package.json ./app/pnpm-lock.yaml ./app/pnpm-workspace.yaml ./
 
 
 # --

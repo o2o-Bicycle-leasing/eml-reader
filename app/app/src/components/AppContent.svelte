@@ -345,8 +345,18 @@ function getHtml(emlData: Record<string, any>): string
 					<!-- Body block -->
 					{#if $emlData.html || $emlData.text}
 						<div class="email-frame">
+							<!--
+								SECURITY: sandbox="" runs the rendered .eml body in a unique,
+								opaque origin with ALL capabilities disabled — no scripts, no
+								forms, no top navigation, no same-origin access. Never add
+								allow-scripts here: e-mail bodies are untrusted input and any
+								inline <script> would otherwise execute same-origin.
+							-->
 							<iframe
 								class="w-full h-full"
+								sandbox=""
+								referrerpolicy="no-referrer"
+								title={_({ en: 'E-mail body', fr: 'Corps de l\'e-mail' })}
 								srcdoc={showHtml ? getHtml($emlData) : getPlainText($emlData)}
 							></iframe>
 						</div>
@@ -406,16 +416,12 @@ function getHtml(emlData: Record<string, any>): string
 				;
 
 			&.active {
-				@apply
-					bg-gray-300
-					text-gray-800
-					;
+				background-color: var(--color-o2o-blue);
+				color: #ffffff;
 
 				.badge {
-					@apply
-						bg-gray-400
-						text-gray-800
-						;
+					background-color: rgba(255, 255, 255, 0.25);
+					color: #ffffff;
 				}
 			}
 		}
