@@ -378,7 +378,6 @@ function getHtml(emlData: Record<string, any>): string
 		flex-col
 		justify-center
 		gap-4
-		max-w-[calc(min(750px,_100%,_75vh_/_1.294))]
 		;
 
 	.menu {
@@ -477,12 +476,6 @@ function getHtml(emlData: Record<string, any>): string
 			border
 			border-[#00000011]
 			;
-
-		aspect-ratio: 1 / 1.294;
-
-		&.paper-landscape {
-			aspect-ratio: 1.294 / 1;
-		}
 	}
 
 	.paper-main {
@@ -496,6 +489,7 @@ function getHtml(emlData: Record<string, any>): string
 				absolute
 				top-0
 				left-0
+				h-full
 				;
 			transform: rotate(-4deg);
 			margin-top: calc(-2% / 1.294);
@@ -525,6 +519,10 @@ function getHtml(emlData: Record<string, any>): string
 		@apply
 			p-0
 			;
+
+		/* Full-width body: give the e-mail frame a tall reading area instead of
+		   the old portrait aspect-ratio (which would be enormous at full width). */
+		min-height: 80vh;
 
 		.email-header {
 			@apply
