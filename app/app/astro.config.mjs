@@ -35,28 +35,15 @@ export default defineConfig({
 		},
 	},
 	i18n: i18n,
-	experimental: {
-		// SECURITY: Content-Security-Policy generated at build time. Astro manages
-		// `script-src` and `style-src` as 'self' + auto-generated hashes for its own
-		// inline island/critical-CSS blocks, so the policy stays strict (no
-		// 'unsafe-inline' for scripts) without breaking hydration. Defense-in-depth
-		// on top of the sandboxed e-mail iframe. `frame-ancestors` is a header-only
-		// directive (ignored in <meta>), so it's set at the reverse-proxy layer.
-		csp: {
-			directives: [
-				"default-src 'self'",
-				"base-uri 'self'",
-				"object-src 'none'",
-				// E-mail inline images are data: URIs; external img/font/connect are
-				// blocked, which also stops e-mail tracking pixels from loading.
-				"img-src 'self' data:",
-				"font-src 'self'",
-				"connect-src 'self'",
-				"frame-src 'self'",
-				"form-action 'self'",
-			],
-		},
-	},
+	// SECURITY: the Content-Security-Policy is set as a <meta> tag in Base.astro
+	// (not Astro's built-in csp). Astro's generator always hashes its own inline
+	// `astro-island` style, and a hash in style-src makes 'unsafe-inline' be
+	// ignored — which blocked rendered e-mail bodies from keeping their inline
+	// styles. Because the app and the e-mail iframe share one inherited policy,
+	// allowing e-mail styling means the app-level style-src/script-src use
+	// 'unsafe-inline'. Untrusted e-mail content stays contained by the iframe
+	// sandbox (no scripts run there regardless). `frame-ancestors` is a
+	// header-only directive, set at the reverse-proxy (Traefik) layer.
 	env: {
 		schema: {
 			// Deployment configuration
