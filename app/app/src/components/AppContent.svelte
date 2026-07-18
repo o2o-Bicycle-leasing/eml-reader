@@ -91,16 +91,22 @@ function getHtml(emlData: Record<string, any>): string
 	// Add base target to the HTML
 	html = html.replace(/<head>/, '<head><base target="_parent">')
 
-	const cidRegex = /\ssrc="cid:([^"]+)"/g
-	let match: RegExpExecArray | null
-	while ((match = cidRegex.exec(html)))
+	// Inline any `cid:` images as data: URIs. Guard on `attachments`: an e-mail
+	// can reference a cid without a matching attachments array, and calling
+	// `.find` on `undefined` would throw and blank the whole body.
+	if (Array.isArray(emlData.attachments))
 	{
-		const cid = match[1]
-		const attachment = emlData.attachments.find((attachment: any) => attachment.id === `<${cid}>`)
-		if (attachment)
+		const cidRegex = /\ssrc="cid:([^"]+)"/g
+		let match: RegExpExecArray | null
+		while ((match = cidRegex.exec(html)))
 		{
-			const contentType = attachment.contentType.split(';')[0]
-			html = html.replace(new RegExp(`\\ssrc="cid:${cid}"`, 'g'), ` src="data:${contentType};base64,${attachment.data64}"`)
+			const cid = match[1]
+			const attachment = emlData.attachments.find((attachment: any) => attachment.id === `<${cid}>`)
+			if (attachment)
+			{
+				const contentType = attachment.contentType.split(';')[0]
+				html = html.replace(new RegExp(`\\ssrc="cid:${cid}"`, 'g'), ` src="data:${contentType};base64,${attachment.data64}"`)
+			}
 		}
 	}
 
