@@ -353,7 +353,7 @@ function getHtml(emlData: Record<string, any>): string
 								inline <script> would otherwise execute same-origin.
 							-->
 							<iframe
-								class="w-full h-full"
+								class="w-full"
 								sandbox=""
 								referrerpolicy="no-referrer"
 								title={_({ en: 'E-mail body', fr: 'Corps de l\'e-mail' })}
@@ -653,6 +653,9 @@ function getHtml(emlData: Record<string, any>): string
 		.email-frame {
 			@apply
 				grow
+				flex
+				flex-col
+				min-h-0
 				border-t
 				border-gray-200
 				;
@@ -660,8 +663,12 @@ function getHtml(emlData: Record<string, any>): string
 			iframe {
 				@apply
 					w-full
-					h-full
 					;
+				/* Fill the frame's full height. A bare `height: 100%` collapses
+				   here because the frame's height comes from flex-grow (computed
+				   `auto`), so grow into it as a flex child instead. */
+				flex: 1 1 auto;
+				min-height: 0;
 			}
 		}
 	}
