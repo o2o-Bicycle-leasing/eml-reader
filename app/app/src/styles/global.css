@@ -38,3 +38,97 @@
 		font-family: var(--font-heading);
 	}
 }
+
+/* ── Retro skin — Ronde van Vlaanderen, anno 1947 ─────────────────────────
+   A post-war Flemish spring-classic treatment for the landing page: aged
+   newsprint, Flemish-Lion gold, ink black, and a kasseien (pavé) seam as the
+   signature. Grounded in the race's own world, so it reads as a period koers-
+   bulletin rather than a generic vintage look. Scoped to `.rvv-page`. */
+:root {
+	--rvv-paper:      #E7E0CE;
+	--rvv-paper-card: #F3EEE0;
+	--rvv-ink:        #1C1813;
+	--rvv-ink-soft:   #4A4238;
+	--rvv-gold:       #D3A029;
+	--rvv-gold-deep:  #9C7317;
+	--rvv-pave:       #6B6459;
+	--rvv-red:        #9E3320;
+}
+
+.rvv-page {
+	background-color: var(--rvv-paper);
+	/* faint newsprint grain, two offset dot grids */
+	background-image:
+		radial-gradient(rgba(28, 24, 19, 0.035) 1px, transparent 1.4px),
+		radial-gradient(rgba(28, 24, 19, 0.028) 1px, transparent 1.4px);
+	background-size: 3px 3px, 7px 7px;
+	background-position: 0 0, 1px 2px;
+	color: var(--rvv-ink);
+}
+
+.rvv-card {
+	background-color: var(--rvv-paper-card);
+	border: 1px solid var(--rvv-ink);
+	border-radius: 2px;
+	/* letterpress offset, not a soft drop shadow */
+	box-shadow: 4px 4px 0 rgba(28, 24, 19, 0.16);
+}
+
+.rvv-dateline {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-bottom: 0.5rem;
+	margin-bottom: 1rem;
+	border-bottom: 1px solid var(--rvv-ink);
+	font-family: var(--font-heading);
+	font-weight: 700;
+	font-size: 0.7rem;
+	letter-spacing: 0.24em;
+	text-transform: uppercase;
+	color: var(--rvv-gold-deep);
+}
+
+.rvv-title {
+	font-family: var(--font-heading);
+	font-weight: 800;
+	font-size: clamp(2rem, 6vw, 3rem);
+	line-height: 0.88;
+	letter-spacing: 0.015em;
+	text-transform: uppercase;
+	color: var(--rvv-ink);
+}
+
+.rvv-lede {
+	color: var(--rvv-ink-soft);
+	max-width: 62ch;
+}
+
+/* Signature: a strip of kasseien (Flemish setts) between two gold seams. Two
+   offset rows of rounded stones over a cobble-grey bed reads as pavé. */
+.rvv-kasseien {
+	height: 18px;
+	margin-top: 1.2rem;
+	border-top: 2px solid var(--rvv-gold);
+	border-bottom: 2px solid var(--rvv-gold-deep);
+	background-color: #575249;
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='44'%20height='18'%3E%3Cg%20fill='%238b8271'%3E%3Crect%20x='1'%20y='1'%20width='20'%20height='7'%20rx='2.5'/%3E%3Crect%20x='23'%20y='1'%20width='20'%20height='7'%20rx='2.5'/%3E%3Crect%20x='-10'%20y='10'%20width='20'%20height='7'%20rx='2.5'/%3E%3Crect%20x='12'%20y='10'%20width='20'%20height='7'%20rx='2.5'/%3E%3Crect%20x='34'%20y='10'%20width='20'%20height='7'%20rx='2.5'/%3E%3C/g%3E%3Cg%20fill='%236f6858'%3E%3Crect%20x='1'%20y='5.5'%20width='20'%20height='2.5'%20rx='1'/%3E%3Crect%20x='23'%20y='5.5'%20width='20'%20height='2.5'%20rx='1'/%3E%3Crect%20x='12'%20y='14.5'%20width='20'%20height='2.5'%20rx='1'/%3E%3C/g%3E%3C/svg%3E");
+	background-size: 44px 18px;
+}
+
+.rvv-naming-title {
+	font-family: var(--font-heading);
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--rvv-ink);
+}
+
+.rvv-naming-title .rvv-mark {
+	color: var(--rvv-red);
+}
+
+.rvv-prose {
+	color: var(--rvv-ink-soft);
+}
