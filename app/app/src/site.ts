@@ -26,8 +26,8 @@ export const site: Site = {
 	lang: 'en',
 	title: 'o2o eml reader',
 	description: {
-		'en': 'Read and display the content of an EML e-mail file — an o2o internal tool. All processing happens locally in your browser.',
-		'fr': 'Lire et afficher le contenu d\'un fichier e-mail EML — un outil interne o2o. Tout le traitement se fait localement dans votre navigateur.',
+		'en': 'Read and display the content of an EML e-mail file, an o2o internal tool. All processing happens locally in your browser.',
+		'fr': 'Lire et afficher le contenu d\'un fichier e-mail EML, un outil interne o2o. Tout le traitement se fait localement dans votre navigateur.',
 	},
 	version: GITHUB_SHA || VERSION_TAG || 'dev',
 	author: 'o2o',

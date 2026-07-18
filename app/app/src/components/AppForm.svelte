@@ -120,6 +120,39 @@ async function onChange(event: Event)
 <style lang="scss">
 @reference "tailwindcss/theme";
 
+/* Make the native file input read as a real button, on-theme with the
+   retro skin (Flemish-Lion gold, ink border, letterpress offset). */
+input[type="file"] {
+	color: var(--color-o2o-text, #201E26);
+}
+
+input[type="file"]::file-selector-button {
+	margin-right: 0.85rem;
+	border: 1px solid var(--rvv-ink, #1C1813);
+	border-radius: 2px;
+	background-color: var(--rvv-gold, #D3A029);
+	color: var(--rvv-ink, #1C1813);
+	padding: 0.5rem 1rem;
+	font-family: var(--font-heading, sans-serif);
+	font-weight: 700;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	cursor: pointer;
+	box-shadow: 2px 2px 0 rgba(28, 24, 19, 0.2);
+	transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+	background-color: var(--rvv-gold-deep, #9C7317);
+	color: #F3EEE0;
+}
+
+input[type="file"]::file-selector-button:active {
+	box-shadow: 1px 1px 0 rgba(28, 24, 19, 0.2);
+	transform: translate(1px, 1px);
+}
+
 .btn {
 	@apply
 		bg-gray-400
