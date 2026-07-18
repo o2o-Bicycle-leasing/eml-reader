@@ -40,6 +40,25 @@ const _ = i18nFactory(Astro.currentLocale as Locales | undefined)
 
 		<AppContent locale={Astro.currentLocale as Locales | undefined} client:load />
 
+		<section class="bg-white shadow-lg rounded-lg p-6 w-full space-y-3">
+			<h2 class="text-xl font-bold text-o2o-text flex items-center gap-2">
+				<span class="icon-[mdi--bike] icon-align"></span>
+				{_({ en: 'Why "Emiel"?', fr: 'Pourquoi « Emiel » ?' })}
+			</h2>
+			<p class="text-gray-600">
+				{_({
+					en: 'Honestly? No particular rider. The pun came first — in Flemish, "Emiel" sounds almost exactly like "e-mail" — and it\'s simply the old Flandrien first name, alongside Odiel, Briek and Stan.',
+					fr: 'Honnêtement ? Aucun coureur en particulier. Le jeu de mots est venu d\'abord — en flamand, « Emiel » se prononce presque comme « e-mail » — et c\'est simplement l\'ancien prénom de Flandrien, aux côtés d\'Odiel, Briek et Stan.',
+				})}
+			</p>
+			<p class="text-gray-600">
+				{_({
+					en: 'Want a real rider to pin it on? Emiel Faignaert won the 1947 Tour of Flanders. But it works without a palmarès too — just hand that .eml to Emiel.',
+					fr: 'Envie d\'un vrai coureur à y accrocher ? Emiel Faignaert a remporté le Tour des Flandres en 1947. Mais ça marche aussi sans palmarès : confiez donc ce .eml à Emiel.',
+				})}
+			</p>
+		</section>
+
 		<Footer class="w-full" />
 	</div>
 
