@@ -33,7 +33,8 @@ docker compose watch
 With `watch`, file changes are synced & rebuilt automatically.
 The site is available at [http://localhost:8080](http://localhost:8080).
 
-Without Docker, you can run the Astro app directly (Node 20+ / pnpm):
+Without Docker, you can run the Astro app directly (Node 22+ / pnpm — see
+`app/app/.nvmrc`; pnpm 11 itself requires Node 22.13 or newer):
 
 ```sh
 cd app/app
