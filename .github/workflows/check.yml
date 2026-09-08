@@ -56,6 +56,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
+          # steps. No job in this repo pushes, tags or commits.
+          persist-credentials: false
 
       # Execution steps
 
@@ -119,6 +123,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
+          # steps. No job in this repo pushes, tags or commits.
+          persist-credentials: false
 
       # Execution steps
 
@@ -232,6 +240,10 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
+          # steps. No job in this repo pushes, tags or commits.
+          persist-credentials: false
 
       # Execution steps
 
