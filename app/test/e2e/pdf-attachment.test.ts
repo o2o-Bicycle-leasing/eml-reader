@@ -12,6 +12,17 @@ test('renders a PDF attachment with a positioned text layer', async ({ page }) =
 {
 	await page.goto('/')
 
+	// Astro drops the `ssr` attribute from an island once it hydrates. Without
+	// waiting, setInputFiles can fire before Svelte has attached its change
+	// handler; the event is then lost and the attachments tab never appears.
+	// Fast machines hide this, but a cold CI run trips over it.
+	await expect
+		.poll(
+			async () => await page.locator('astro-island[ssr]').count(),
+			{ message: 'islands should finish hydrating before interacting' },
+		)
+		.toBe(0)
+
 	await page.locator('input[type="file"]').setInputFiles(fixtureEml)
 
 	await page.locator('nav.menu a', { hasText: 'Attachments' }).click()
