@@ -23,7 +23,8 @@ export interface Site
 }
 
 export const site: Site = {
-	lang: 'en',
+	// No `lang` here on purpose: it would apply to every route, including
+	// /fr. Base.astro derives it from Astro.currentLocale instead.
 	title: 'o2o eml reader',
 	description: {
 		'en': 'Read and display the content of an EML e-mail file, an o2o internal tool. All processing happens locally in your browser.',
