@@ -72,7 +72,7 @@ const formatsToType = {
 
 <!DOCTYPE html>
 <html
-	lang={Astro.props.lang}
+	lang={Astro.props.lang ?? Astro.currentLocale}
 	class={Astro.props.htmlClass}
 	{...Astro.props.htmlAttributes}
 >
