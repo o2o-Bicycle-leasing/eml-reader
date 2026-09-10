@@ -50,12 +50,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # Only run if:
+    # - Checks are not disabled
+    if: |
+      vars.CI_DISABLE_CHECKS != 'true'
+
     steps:
 
-      # Dependency steps
+      # Initialization steps
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
           # steps. No job in this repo pushes, tags or commits.
@@ -66,10 +71,12 @@ jobs:
       - name: Pull dependencies
         run: |
           # docker compose pull --ignore-buildable
+          echo '::group::Pull details'
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.cicd.yml \
             --env-file .env \
             pull --ignore-buildable
+          echo '::endgroup::'
 
       - name: Build for production
         env:
@@ -83,7 +90,7 @@ jobs:
           ASTRO_SITE_URL: ${{ vars.ASTRO_SITE_URL }}
           ASTRO_BASE_PATH: ${{ vars.ASTRO_BASE_PATH }}
           ASTRO_ASSETS_PREFIX: ${{ vars.ASTRO_ASSETS_PREFIX }}
-          # Application
+          # Application (app env vars)
           # (Add env vars for your application here.)
         run: |
           # docker compose build
@@ -98,11 +105,13 @@ jobs:
       - name: Copy application files
         run: |
           # docker compose up
+          echo '::group::Run details'
           export DOCKER_UID="$(id -u)"
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.cicd.yml \
             --env-file .env \
             up
+          echo '::endgroup::'
 
       - name: Check application files
         run: |
@@ -117,12 +126,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # Only run if:
+    # - Checks are not disabled
+    # - Tests are not disabled
+    # - Unit tests are not disabled
+    if: |
+      vars.CI_DISABLE_CHECKS != 'true' &&
+      vars.CI_DISABLE_TESTS != 'true' &&
+      vars.CI_DISABLE_TESTS_UNIT != 'true'
+
     steps:
 
-      # Dependency steps
+      # Initialization steps
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
           # steps. No job in this repo pushes, tags or commits.
@@ -130,15 +148,17 @@ jobs:
 
       # Execution steps
 
-      - name: Pull dependencies
+      - name: Pull images for unit tests
         run: |
           # docker compose pull --ignore-buildable
+          echo '::group::Pull details'
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.test-unit.yml \
             --env-file .env \
             pull --ignore-buildable
+          echo '::endgroup::'
 
-      - name: Build for unit tests
+      - name: Build images for unit tests
         env:
           # Deployment
           GITHUB_REPOSITORY_URL: https://github.com/${{ github.repository }}
@@ -148,7 +168,7 @@ jobs:
           ASTRO_SITE_URL: ${{ vars.ASTRO_SITE_URL }}
           ASTRO_BASE_PATH: ${{ vars.ASTRO_BASE_PATH }}
           ASTRO_ASSETS_PREFIX: ${{ vars.ASTRO_ASSETS_PREFIX }}
-          # Application
+          # Application (app env vars)
           # (Add env vars for your application here.)
         run: |
           # docker compose build
@@ -163,11 +183,13 @@ jobs:
       - name: Start unit tests
         run: |
           # docker compose up
+          echo '::group::Run details'
           export DOCKER_UID="$(id -u)"
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.test-unit.yml \
             --env-file .env \
             up -d
+          echo '::endgroup::'
 
       - name: List unit tests services
         run: |
@@ -183,7 +205,7 @@ jobs:
           echo "${DOCKER_SERVICES}" >> $GITHUB_ENV
           echo 'GITHUB_ENV_EOF' >> $GITHUB_ENV
 
-      - name: Wait for unit tests to finish
+      - name: Wait for services to finish
         env:
           DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
         run: |
@@ -194,7 +216,7 @@ jobs:
             wait $DOCKER_SERVICES \
             || exit 0
 
-      - name: Print unit tests logs
+      - name: Print services logs
         env:
           DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
         run: |
@@ -234,12 +256,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # Only run if:
+    # - Checks are not disabled
+    # - Tests are not disabled
+    # - E2E tests are not disabled
+    if: |
+      vars.CI_DISABLE_CHECKS != 'true' &&
+      vars.CI_DISABLE_TESTS != 'true' &&
+      vars.CI_DISABLE_TESTS_E2E != 'true'
+
     steps:
 
-      # Dependency steps
+      # Initialization steps
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           # SECURITY: don't leave the GITHUB_TOKEN in .git/config for later
           # steps. No job in this repo pushes, tags or commits.
@@ -247,15 +278,17 @@ jobs:
 
       # Execution steps
 
-      - name: Pull dependencies
+      - name: Pull images for e2e tests
         run: |
           # docker compose pull --ignore-buildable
+          echo '::group::Pull details'
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.test-e2e.yml \
             --env-file .env \
             pull --ignore-buildable
+          echo '::endgroup::'
 
-      - name: Build for E2E tests
+      - name: Build images for e2e tests
         env:
           # Deployment
           GITHUB_REPOSITORY_URL: https://github.com/${{ github.repository }}
@@ -265,7 +298,7 @@ jobs:
           ASTRO_SITE_URL: ${{ vars.ASTRO_SITE_URL }}
           ASTRO_BASE_PATH: ${{ vars.ASTRO_BASE_PATH }}
           ASTRO_ASSETS_PREFIX: ${{ vars.ASTRO_ASSETS_PREFIX }}
-          # Application
+          # Application (app env vars)
           # (Add env vars for your application here.)
         run: |
           # docker compose build
@@ -277,16 +310,18 @@ jobs:
             build
           echo '::endgroup::'
 
-      - name: Start E2E tests
+      - name: Start e2e tests
         run: |
           # docker compose up
+          echo '::group::Run details'
           export DOCKER_UID="$(id -u)"
           docker compose \
             -f ./docker-compose.yml -f ./docker-compose.test-e2e.yml \
             --env-file .env \
             up -d
+          echo '::endgroup::'
 
-      - name: List E2E tests services
+      - name: List e2e tests services
         run: |
           # Set DOCKER_SERVICES environment variable
           DOCKER_SERVICES="$(
@@ -300,7 +335,7 @@ jobs:
           echo "${DOCKER_SERVICES}" >> $GITHUB_ENV
           echo 'GITHUB_ENV_EOF' >> $GITHUB_ENV
 
-      - name: Wait for E2E tests to finish
+      - name: Wait for services to finish
         env:
           DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
         run: |
@@ -311,7 +346,7 @@ jobs:
             wait $DOCKER_SERVICES \
             || exit 0
 
-      - name: Print E2E tests logs
+      - name: Print services logs
         env:
           DOCKER_SERVICES: ${{ env.DOCKER_SERVICES }}
         run: |
@@ -328,12 +363,12 @@ jobs:
           # Check services exit codes
           echo '::group::Check services exit codes'
           docker compose \
-            -f ./docker-compose.yml -f ./docker-compose.test-unit.yml \
+            -f ./docker-compose.yml -f ./docker-compose.test-e2e.yml \
             --env-file .env \
             ps -a
           NON_ZERO_EXIT_CODES=$(
             docker compose \
-              -f ./docker-compose.yml -f ./docker-compose.test-unit.yml \
+              -f ./docker-compose.yml -f ./docker-compose.test-e2e.yml \
               --env-file .env \
               ps -a --format '{{.ExitCode}}' \
             | grep -v '^0$' \

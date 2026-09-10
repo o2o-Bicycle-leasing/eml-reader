@@ -1,0 +1,19 @@
+# pnpm reads build-script approvals from this file. These packages ship
+# prebuilt native binaries and need their install scripts approved so that
+# `pnpm install` doesn't abort with ERR_PNPM_IGNORED_BUILDS (which would
+# otherwise break the Docker build on Coolify).
+allowBuilds:
+  '@parcel/watcher': true
+  '@tailwindcss/oxide': true
+  esbuild: true
+  sharp: true
+
+minimumReleaseAgeExclude:
+  - yaml@2.8.3
+
+# The js-yaml and sharp overrides that used to live here are gone: they existed
+# only because astro 5 pinned both below their patched versions and the 5.x
+# branch got no security backports. astro 7 declares js-yaml ^4.3.0 and
+# sharp ^0.34.0 || ^0.35.0, so it resolves them itself.
+overrides:
+  yaml@>=2.0.0 <2.8.3: ^2.8.3

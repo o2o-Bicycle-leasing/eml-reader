@@ -1,6 +1,6 @@
-@import "~/styles/fonts.css";
-@import "~/styles/tailwind.css";
-@import "~/styles/utils.css";
+@import "./fonts.css";
+@import "./tailwind.css";
+@import "./utils.css";
 
 /* o2o brand variables — declared explicitly on :root so raw var() references in
    component-scoped styles resolve regardless of Tailwind's theme tree-shaking. */
