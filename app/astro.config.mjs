@@ -1,7 +1,7 @@
 import { defineConfig, envField } from 'astro/config'
 import svelte from '@astrojs/svelte'
 import tailwindcss from '@tailwindcss/vite'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 import { i18n } from '/src/config'
 
@@ -16,23 +16,24 @@ export default defineConfig({
 		svelte(),
 	],
 	vite: {
-		plugins: [
-			tailwindcss(),
-		],
-		optimizeDeps: {
-			esbuildOptions: {
-				// Node.js global to browser globalThis
-				define: {
-					global: 'globalThis',
-				},
-				// Enable esbuild polyfill plugins
-				plugins: [
-					NodeGlobalsPolyfillPlugin({
-						buffer: true,
-					}),
-				],
+		resolve: {
+			alias: {
+				'~': '/src',
 			},
 		},
+		plugins: [
+			tailwindcss(),
+			nodePolyfills({
+				// Avoid polyfilling `node:`-prefixed imports, which clashes with
+				// Rolldown's own internal runtime (e.g. `node:module`'s createRequire)
+				protocolImports: false,
+				// Node.js global to browser globalThis
+				globals: {
+					Buffer: true,
+					global: true,
+				},
+			}),
+		],
 	},
 	i18n: i18n,
 	// SECURITY: the Content-Security-Policy is set as a <meta> tag in Base.astro
@@ -47,6 +48,7 @@ export default defineConfig({
 	env: {
 		schema: {
 			// Deployment configuration
+			APP_ENV: envField.enum({ context: 'client', access: 'public', optional: true, values: ['dev', 'test', 'prod'], default: 'prod' }),
 			GITHUB_REPOSITORY_URL: envField.string({ context: 'client', access: 'public', optional: true }),
 			GITHUB_SHA: envField.string({ context: 'client', access: 'public', optional: true }),
 			VERSION_TAG: envField.string({ context: 'client', access: 'public', optional: true }),

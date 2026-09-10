@@ -38,3 +38,7 @@
 	/* o2o layout */
 	--radius-o2o-card: 20px;
 }
+
+/* Tailwind CSS safe list */
+/* You may optionally declare a safelist of classes to always include in the final CSS output. */
+/* Syntax example: `@source inline("{sm:,md,lg:,xl:,}bg-red-{100..900..50}");` */
