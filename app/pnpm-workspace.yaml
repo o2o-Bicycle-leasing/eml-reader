@@ -16,4 +16,4 @@ minimumReleaseAgeExclude:
 # branch got no security backports. astro 7 declares js-yaml ^4.3.0 and
 # sharp ^0.34.0 || ^0.35.0, so it resolves them itself.
 overrides:
-  yaml@>=2.0.0 <2.8.3: ^2.8.3
+  yaml@>=2.0.0 <2.9.1: ^2.9.1
