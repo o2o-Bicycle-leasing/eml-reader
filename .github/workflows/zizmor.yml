@@ -10,6 +10,43 @@ permissions: {}
 jobs:
   zizmor:
     name: Audit GitHub Actions security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
-    uses: o2o-Bicycle-leasing/o2o-github-workflows/.github/workflows/zizmor.yml@v4
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: "0.13.0"
+          enable-cache: false
+
+      # This repository is public, so it cannot call the organisation's private
+      # reusable workflow; these are the same steps. Findings are annotations only.
+      - name: Run zizmor
+        run: |
+          cat > "$RUNNER_TEMP/zizmor-requirements.txt" <<'REQ'
+          zizmor==1.30.1 \
+              --hash=sha256:eee12266b793cb87ad4a7e3af2e72404f8a63e3de5eb099b80bf7b1cfd232a8e \
+              --hash=sha256:92906f448365672ebb657fb50d36f997290a3aaba8cac723214741ea9054845d
+          REQ
+          cat > "$RUNNER_TEMP/zizmor.yml" <<'CFG'
+          rules:
+            unpinned-uses:
+              config:
+                policies:
+                  actions/*: ref-pin
+          CFG
+          uv venv --no-config "$RUNNER_TEMP/zizmor"
+          uv pip install --no-config --python "$RUNNER_TEMP/zizmor" --require-hashes -r "$RUNNER_TEMP/zizmor-requirements.txt"
+          rc=0
+          "$RUNNER_TEMP/zizmor/bin/zizmor" --no-online-audits --format=github --color=never \
+            --min-severity=high "--config=$RUNNER_TEMP/zizmor.yml" -- . || rc=$?
+          # 11-14 mean findings; anything else is a zizmor error and fails the job.
+          if (( rc >= 11 && rc <= 14 )); then
+            exit 0
+          fi
+          exit "$rc"
