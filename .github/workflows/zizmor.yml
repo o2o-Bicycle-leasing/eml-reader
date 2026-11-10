@@ -1,0 +1,15 @@
+name: zizmor
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+
+permissions: {}
+
+jobs:
+  zizmor:
+    name: Audit GitHub Actions security
+    permissions:
+      contents: read
+    uses: o2o-Bicycle-leasing/o2o-github-workflows/.github/workflows/zizmor.yml@v4
