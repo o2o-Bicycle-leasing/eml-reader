@@ -1,0 +1,3 @@
+# Changes to CI workflows and to this file need approval from the platform squad or an org owner.
+/.github/workflows/ @o2o-Bicycle-leasing/platform-squad @AntonSlegers-o2o @matthias-deschoenmacker @pdpotter @simonflore @JeppeKnockaert
+/.github/CODEOWNERS @o2o-Bicycle-leasing/platform-squad @AntonSlegers-o2o @matthias-deschoenmacker @pdpotter @simonflore @JeppeKnockaert
