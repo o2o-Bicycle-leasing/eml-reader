@@ -18,7 +18,7 @@ ARG UID=1001
 
 FROM alpine:3.24 AS alpine_upstream
 FROM node:24-slim AS node_upstream
-FROM nginx:1.30-alpine AS nginx_upstream
+FROM nginx:1.30.7-alpine@sha256:bef154735288bc38d99fac41ae63730684bcc661503673a04a0f9bc526ba8598 AS nginx_upstream
 
 
 # --
